@@ -45,40 +45,32 @@ export function NewsFeedView(props: INewsFeedProps): JSX.Element {
   const nextPage = Math.ceil((skip || 1) / first) + 1;
 
   return (
-    <tr>
-      <td style={{ padding: '0px' }}>
-        <table
-          style={{
-            border: '0px',
-            padding: '0px',
-            borderCollapse: 'collapse',
-            borderSpacing: '0px',
-          }}
-          className="itemlist"
-        >
-          <tbody>
-            {notice && notice}
-            <>
-              {newsItems
-                .filter((newsItem): newsItem is NewsItemModel => !!newsItem && !newsItem.hidden)
-                .flatMap((newsItem, index) => [
+    <table className="itemlist">
+      <tbody>
+        {notice && notice}
+        <>
+          {newsItems
+            .filter((newsItem): newsItem is NewsItemModel => !!newsItem && !newsItem.hidden)
+            .flatMap((newsItem, index) => [
+              <tr key={`${newsItem.id}`} className="test">
+                <td className="news-feed-row">
                   <NewsTitle
-                    key={`${newsItem.id}title`}
                     isRankVisible={isRankVisible}
                     isUpvoteVisible={isUpvoteVisible}
                     rank={skip + index + 1}
                     {...newsItem}
-                  />,
+                  />
                   <NewsDetail
-                    key={`${newsItem.id}detail`}
                     isFavoriteVisible={false}
                     isPostScrutinyVisible={isPostScrutinyVisible}
                     isJobListing={isJobListing}
                     {...newsItem}
-                  />,
-                  <tr className="spacer" key={`${newsItem.id}spacer`} style={{ height: 5 }} />,
-                ])}
-              <tr key="morespace" className="morespace" style={{ height: '10px' }} />
+                  />
+                </td>
+              </tr>,
+              // <tr className="spacer" key={`${newsItem.id}spacer`} style={{ height: 20 }} />,
+            ])}
+          {/* <tr key="morespace" className="morespace" style={{ height: '10px' }} />
               <tr key="morelinktr">
                 <td key="morelinkcolspan" colSpan={2} />
                 <td key="morelinktd" className="title">
@@ -91,12 +83,10 @@ export function NewsFeedView(props: INewsFeedProps): JSX.Element {
                     More
                   </a>
                 </td>
-              </tr>
-            </>
-          </tbody>
-        </table>
-      </td>
-    </tr>
+              </tr> */}
+        </>
+      </tbody>
+    </table>
   );
 }
 

@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
-import Link from 'next/link';
 import * as React from 'react';
 
 import { NewsFeed, newsFeedNewsItemFragment } from '../src/components/news-feed';
@@ -44,30 +43,6 @@ export function ShowNewPage(props): JSX.Element {
         data={data}
         first={first}
         skip={skip}
-        notice={
-          <>
-            <tr key="noticetopspacer" style={{ height: '5px' }} />
-            <tr key="notice">
-              <td colSpan={2} />
-              <td>
-                Please read the{' '}
-                <Link href="/showhn">
-                  <a>
-                    <u>rules</u>
-                  </a>
-                </Link>
-                . You can also browse the{' '}
-                <Link href="/shownew">
-                  <a>
-                    <u>newest</u>
-                  </a>
-                </Link>{' '}
-                Show HNs.
-              </td>
-            </tr>
-            <tr key="noticebottomspacer" style={{ height: '10px' }} />
-          </>
-        }
       />
     </MainLayout>
   );

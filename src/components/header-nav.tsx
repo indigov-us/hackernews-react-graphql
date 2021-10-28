@@ -12,58 +12,40 @@ export function HeaderNav(props: IHeaderNavProps): JSX.Element {
   const { userId, currentUrl, isNavVisible, title } = props;
 
   return isNavVisible ? (
-    <span className="pagetop">
-      <b className="hnname">
+    <div className="pagetop">
+      <div style={{ fontSize: '26px', marginBottom: '8px' }}>
         <Link href="/" as="/news">
           <a>{title}</a>
         </Link>
-      </b>
-      &nbsp;
-      {userId && (
-        <Link href="/newswelcome">
-          <a>welcome</a>
+      </div>
+      <div>
+        {userId && ' | '}
+        <Link href="/newest">
+          <a className={currentUrl === '/newest' ? 'topsel' : ''}>new</a>
         </Link>
-      )}
-      {userId && ' | '}
-      <Link href="/newest">
-        <a className={currentUrl === '/newest' ? 'topsel' : ''}>new</a>
-      </Link>
-      {userId && ' | '}
-      {userId && (
-        <Link href={`/threads?id=${userId}`}>
-          <a className={currentUrl === '/threads' ? 'topsel' : ''}>threads</a>
+        {' | '}
+        {/* <Link href="/newcomments">
+          <a className={currentUrl === '/newcomments' ? 'topsel' : ''}>comments</a>
         </Link>
-      )}
-      {' | '}
-      <Link href="/newcomments">
-        <a className={currentUrl === '/newcomments' ? 'topsel' : ''}>comments</a>
-      </Link>
-      {' | '}
-      <Link href="/show">
-        <a className={currentUrl === '/show' ? 'topsel' : ''}>show</a>
-      </Link>
-      {' | '}
-      <Link href="/ask">
-        <a className={currentUrl === '/ask' ? 'topsel' : ''}>ask</a>
-      </Link>
-      {' | '}
-      <Link href="/jobs">
-        <a className={currentUrl === '/jobs' ? 'topsel' : ''}>jobs</a>
-      </Link>
-      {' | '}
-      <Link href="/submit">
-        <a className={currentUrl === '/submit' ? 'topsel' : ''}>submit</a>
-      </Link>
-      {currentUrl === '/best' && ' | '}
-      {currentUrl === '/best' && (
-        <Link href="/best">
-          <a className="topsel">best</a>
+        {' | '} */}
+        {/* <Link href="/show">
+          <a className={currentUrl === '/show' ? 'topsel' : ''}>all</a>
         </Link>
-      )}
-    </span>
+        {' | '} */}
+        <Link href="/submit">
+          <a className={currentUrl === '/submit' ? 'topsel' : ''}>submit</a>
+        </Link>
+        {currentUrl === '/best' && ' | '}
+        {currentUrl === '/best' && (
+          <Link href="/best">
+            <a className="topsel">best</a>
+          </Link>
+        )}
+      </div>
+    </div>
   ) : (
-    <span className="pagetop">
+    <div className="pagetop">
       <b>{title}</b>
-    </span>
+    </div>
   );
 }

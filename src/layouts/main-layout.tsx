@@ -2,7 +2,6 @@ import Head from 'next/head';
 import * as React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { Footer } from '../components/footer';
 import { Header } from '../components/header';
 import { IMeQuery, ME_QUERY } from '../data/queries/me-query';
 
@@ -22,8 +21,7 @@ export function MainLayout(props: IMainLayoutProps): JSX.Element {
     children,
     currentUrl,
     isNavVisible = true,
-    isFooterVisible = true,
-    title = 'Hacker News',
+    title = 'News Feed',
   } = props;
 
   return (
@@ -35,31 +33,22 @@ export function MainLayout(props: IMainLayoutProps): JSX.Element {
         <link rel="stylesheet" type="text/css" href="/static/news.css" />
         <link rel="shortcut icon" href="/static/favicon.ico" />
       </Head>
-      <table
+      <div
         id="hnmain"
         style={{
-          backgroundColor: '#f6f6ef',
-          border: '0px',
-          borderCollapse: 'collapse',
-          borderSpacing: '0px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          padding: '0px',
-          width: '85%',
+          width: '100%',
         }}
       >
-        <tbody>
+        <div style={{ display: 'flex', flexDirection: 'column', padding: '0 32px',}}>
           <Header
             currentUrl={currentUrl}
             isNavVisible={!!isNavVisible}
             me={data?.me}
             title={title!}
           />
-          <tr style={{ height: '10px' }} />
-          {children}
-          {isFooterVisible && <Footer />}
-        </tbody>
-      </table>
+          <div style={{ flex: 1 }}>{children}</div>
+        </div>
+      </div>
     </div>
   );
 }
