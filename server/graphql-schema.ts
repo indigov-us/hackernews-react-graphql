@@ -7,159 +7,111 @@ import gql from 'graphql-tag';
 
   Comments are provided when property is not obvious
 */
-export const typeDefs = gql(`
-  type Comment {
-    id: Int!
+export const typeDefs = gql`
+    scalar Date
 
-    creationTime: Date!
+    type Vote {
+        id: String!
+        createdAt: Date!
+        updatedAt: Date
+        value: Float!
+        userId: String!
+        user: User
+        articleId: String!
+        article: Article
+    }
 
-    comments: [Comment]!
 
-    # The ID of the item to which the comment was made on
-    parent: Int!
+    type Article {
 
-    # The ID of the user who submitted the comment
-    submitterId: String!
+        id: String!
 
-    text: String
+        tags: [Tag]!
+        votes: [Vote]!
+        
+        # The news item headline
+        title: String!
 
-    # Whether the currently logged in user has upvoted the comment
-    upvoted: Boolean!
+        description: String
+        
+        url: String
 
-    # The User who submitted the comment
-    author: User
-  }
-
-  scalar Date
-
-  # A list of options for the sort order of the feed
-  enum FeedType {
-    # Sort by a combination of freshness and score, using an algorithm (Could use Reddit's)
-    top
-  
-    # Newest entries first
-    new
-
-    # Sort by score
-    best
-
-    # SHOW HN articles
-    show
-
-    # ASK HN articles
-    ask
-
-    # Job listings
-    job
-  }
-  
-  type NewsItem {
-
-    id: Int!
-
-    comments: [Comment]!
-
-    commentCount: Int!
-
-    creationTime: Date!
-
-    # List of user ids who have hidden this post
-    hides: [String]!
-
-    # Whether the currently logged in user has hidden the post
-    hidden: Boolean!
-
-    # The ID of the news item submitter
-    submitterId: String!
-
-    # The news item headline
-    title: String!
-
-    text: String
-
-    # Whether the currently logged in user has upvoted the post
-    upvoted: Boolean!
-
-    upvotes: [String]!
-
-    upvoteCount: Int!
-
-    url: String
-
-    # Fetches the author based on submitterId
-    author: User
-  }
-
-  type User {
-    # The user ID is a string of the username
-    id: String!
-
-    about: String
-
-    creationTime: Date!
-
-    dateOfBirth: Date
-
-    email: String
-
-    favorites: [Int]
-
-    firstName: String
-
-    hides: [Int]!
-
-    karma: Int!
-
-    lastName: String
-
-    likes: [Int]!
+        score: Float
+        
+        # Fetches the author based on submitterId
+        user: User
+        
+    }
     
-    posts: [Int]!
-  }
+    type Tag {
+        id: String!
+        createdAt: Date!
+        updatedAt: Date
+        
+        text: String!
+        userId: String!
+        user: User
+        articleId: String!
+        article: Article
+    }
+    
 
-  # the schema allows the following queries:
-  type Query {
-    # A comment, it's parent could be another comment or a news item.
-    comment(id: Int!): Comment
+    type User {
+        # The user ID is a string of the username
+        id: String!
+        createdAt: Date!
+        updatedAt: Date
+        
+        zendeskId: String!
 
-    feed(
-      # The sort order for the feed
-      type: FeedType!,
+        articles: [Article]!
+        tags: [Tag]!
+        votes: [Vote]!
+    }
 
-      # The number of items to fetch (starting from the skip index), for pagination
-      first: Int
+    # the schema allows the following queries:
+    type Query {
+        # A comment, it's parent could be another comment or a news item.
+        tag(id: Int!): Tag
 
-      # The number of items to skip, for pagination
-      skip: Int,    
-    ): [NewsItem]
+        feed(
+            # The number of items to skip, for pagination
+            skip: Int,
+        ): [Article]
+        
+        # A news item
+        article(id: String!): Article
 
-    # The currently logged in user or null if not logged in
-    me: User
+        # A user
+        user(zendeskId: String!): User
+    }
 
-    # A news item
-    newsItem(id: Int!): NewsItem
+    # This schema allows the following mutations:
+    type Mutation {
+        voteOnArticle(
+            articleId: String!
+            userId: String!
+            vote: Int! # 1-4
+        ): Article
 
-    # A user
-    user(id: String!): User
-  }
-
-  # This schema allows the following mutations:
-  type Mutation {
-    upvoteNewsItem (
-      id: Int!
-    ): NewsItem
-
-    hideNewsItem (
-      id: Int!
-    ): NewsItem
-
-    submitNewsItem (
-      title: String!
-      url: String
-      text: String
-    ): NewsItem
-  }
-`);
+        tagArticle(
+            articleId: String!
+            userId: String!
+            tag: String!
+        ): Tag
+        
+        submitArticle (
+            title: String!
+            url: String!
+            description: String
+            userId: String!
+        ): Article
+        
+        initializeUser(
+            zendeskId: String!
+        ): User
+    }
+`;
 
 // Example query
 // query {
