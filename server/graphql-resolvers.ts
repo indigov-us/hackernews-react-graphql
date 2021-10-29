@@ -1,13 +1,12 @@
-import {debug} from 'debug';
-import {GraphQLScalarType} from 'graphql';
-import {Kind} from 'graphql/language';
-import type {IResolvers} from 'graphql-tools';
+import { debug } from 'debug';
+import { GraphQLScalarType } from 'graphql';
+import { Kind } from 'graphql/language';
+import type { IResolvers } from 'graphql-tools';
 
-import type {PrismaClient} from '@prisma/client';
+import type { PrismaClient } from '@prisma/client';
 
 const logger = debug('app:Graphql-Resolvers');
 logger.log = console.log.bind(console);
-
 
 export interface IGraphQlSchemaContext {
   userId: string | undefined;
@@ -35,107 +34,109 @@ export const resolvers: IResolvers<any, IGraphQlSchemaContext> = {
   /*          QUERY RESOLVERS        */
 
   Query: {
-    async article(_, {id}, context): Promise<unknown | void> {
+    async article(_, { id }, context): Promise<unknown | void> {
       return context.prisma.article.findUnique({
         where: {
-          id
-        }
-      })
+          id,
+        },
+      });
     },
 
-    async feed(root, {type, first, skip}, context): Promise<(unknown | void)[]> {
+    async feed(root, { type, first, skip }, context): Promise<(unknown | void)[]> {
       const limit = first < 1 || first > 30 ? 30 : first; // Could put this constant limit of 30 items into config
 
-      const articles = await context.prisma.article.findMany()
+      const articles = await context.prisma.article.findMany();
 
-      return articles
+      return articles;
     },
 
-    async user(_, {zendeskId}, context): Promise<unknown | void> {
+    async user(_, { zendeskId }, context): Promise<unknown | void> {
       logger('Me: userId:', zendeskId);
 
       return context.prisma.user.findFirst({
         where: {
-          zendeskId: zendeskId
-        }
-      })
+          zendeskId: zendeskId,
+        },
+      });
     },
-
   },
 
   /*       MUTATION RESOLVERS       */
 
   Mutation: {
-    async voteOnArticle(_, {articleId, userId, vote}, context): Promise<unknown> {
+    async voteOnArticle(_, { articleId, userId, vote }, context): Promise<unknown> {
       await context.prisma.vote.create({
         data: {
           value: vote,
           articleId,
           userId,
-        }
-      })
+        },
+      });
 
       const votes = await context.prisma.vote.findMany({
         where: {
-          articleId
-        }
-      })
+          articleId,
+        },
+      });
 
-      let sum = 0
+      let sum = 0;
       for (const v of votes) {
-        sum += v.value
+        sum += v.value;
       }
 
       return context.prisma.article.update({
         where: {
-          id: articleId
+          id: articleId,
         },
         data: {
-          score: sum / votes.length
-        }
-      })
+          score: sum / votes.length,
+        },
+      });
     },
 
-    async submitArticle(_, {title, url, description, userId}, context): Promise<unknown> {
+    async submitArticle(_, { title, url, description, userId }, context): Promise<unknown> {
       return context.prisma.article.create({
         data: {
           url,
           title,
           description,
-          userId
-        }
-      })
+          userId,
+        },
+      });
     },
-    async tagArticle(_, {articleId, userId, tags}, context: IGraphQlSchemaContext): Promise<unknown> {
-      const data = tags.map(t => ({
-            value: t.value,
-            label: t.label,
-            articleId,
-            userId
-        })
-      )
-      await context.prisma.tag.createMany({data})
+    async tagArticle(
+      _,
+      { articleId, userId, tags },
+      context: IGraphQlSchemaContext
+    ): Promise<unknown> {
+      const data = tags.map((t) => ({
+        value: t.value,
+        label: t.label,
+        articleId,
+        userId,
+      }));
+      await context.prisma.tag.createMany({ data });
 
       return context.prisma.article.findUnique({
         where: {
-          id: articleId
-        }
-      })
+          id: articleId,
+        },
+      });
     },
-    async initializeUser(_, {zendeskId}, context: IGraphQlSchemaContext): Promise<unknown> {
+    async initializeUser(_, { zendeskId }, context: IGraphQlSchemaContext): Promise<unknown> {
       const user = await context.prisma.user.findFirst({
         where: {
-          zendeskId
-        }
-      })
-      if (user) return user
+          zendeskId,
+        },
+      });
+      if (user) return user;
 
       return context.prisma.user.create({
         data: {
-          zendeskId
-        }
-      })
-    }
+          zendeskId,
+        },
+      });
+    },
   },
 
   /*       GRAPHQL TYPE RESOLVERS        */
@@ -165,40 +166,40 @@ export const resolvers: IResolvers<any, IGraphQlSchemaContext> = {
     async user(article, _, context): Promise<unknown | void> {
       return context.prisma.user.findUnique({
         where: {
-          id: article.userId
-        }
-      })
+          id: article.userId,
+        },
+      });
     },
     async tags(article, _, context): Promise<unknown[]> {
       return context.prisma.tag.findMany({
         where: {
-          articleId: article.id
-        }
-      })
+          articleId: article.id,
+        },
+      });
     },
     async votes(article, _, context): Promise<unknown[]> {
       return context.prisma.vote.findMany({
         where: {
-          articleId: article.id
-        }
-      })
-    }
+          articleId: article.id,
+        },
+      });
+    },
   },
 
   Vote: {
     async user(obj, _, context): Promise<unknown | void> {
       return context.prisma.user.findUnique({
         where: {
-          id: obj.userId
-        }
-      })
+          id: obj.userId,
+        },
+      });
     },
     async article(obj, _, context): Promise<unknown | void> {
       return context.prisma.article.findUnique({
         where: {
-          id: obj.articleId
-        }
-      })
+          id: obj.articleId,
+        },
+      });
     },
   },
 
@@ -206,16 +207,16 @@ export const resolvers: IResolvers<any, IGraphQlSchemaContext> = {
     async user(obj, _, context): Promise<unknown | void> {
       return context.prisma.user.findUnique({
         where: {
-          id: obj.userId
-        }
-      })
+          id: obj.userId,
+        },
+      });
     },
     async article(obj, _, context): Promise<unknown | void> {
       return context.prisma.article.findUnique({
         where: {
-          id: obj.articleId
-        }
-      })
+          id: obj.articleId,
+        },
+      });
     },
   },
 
@@ -223,23 +224,23 @@ export const resolvers: IResolvers<any, IGraphQlSchemaContext> = {
     async articles(user, _, context): Promise<unknown[]> {
       return context.prisma.article.findMany({
         where: {
-          userId: user.id
-        }
-      })
+          userId: user.id,
+        },
+      });
     },
     async votes(user, _, context): Promise<unknown[]> {
       return context.prisma.vote.findMany({
         where: {
-          userId: user.id
-        }
-      })
+          userId: user.id,
+        },
+      });
     },
     async tags(user, _, context): Promise<unknown[]> {
       return context.prisma.tag.findMany({
         where: {
-          userId: user.id
-        }
-      })
+          userId: user.id,
+        },
+      });
     },
   },
 };
