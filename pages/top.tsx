@@ -41,7 +41,7 @@ export function Top10(props): JSX.Element {
   const { data } = useQuery(query, { variables: { first, skip, type: FeedType.TOP } });
 
   const top10Articles = useMemo(() => {
-    const articles = [...data?.feed];
+    const articles = data?.feed ? [...data.feed] : [];
     return articles.sort((a, b) => b.score - a.score)
   }, [data]);
 
