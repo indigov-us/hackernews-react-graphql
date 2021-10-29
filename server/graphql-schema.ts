@@ -28,40 +28,46 @@ export const typeDefs = gql`
 
         tags: [Tag]!
         votes: [Vote]!
-        
+
         # The news item headline
         title: String!
 
         description: String
-        
+
         url: String
 
         score: Float
-        
+
         # Fetches the author based on submitterId
         user: User
-        
+
     }
-    
+
     type Tag {
         id: String!
         createdAt: Date!
         updatedAt: Date
-        
-        text: String!
+
+        value: String!
+        label: String!
         userId: String!
         user: User
         articleId: String!
         article: Article
     }
     
+    input TagObject {
+        label: String!
+        value: String!
+    }
+
 
     type User {
         # The user ID is a string of the username
         id: String!
         createdAt: Date!
         updatedAt: Date
-        
+
         zendeskId: String!
 
         articles: [Article]!
@@ -78,7 +84,7 @@ export const typeDefs = gql`
             # The number of items to skip, for pagination
             skip: Int,
         ): [Article]
-        
+
         # A news item
         article(id: String!): Article
 
@@ -97,20 +103,18 @@ export const typeDefs = gql`
         tagArticle(
             articleId: String!
             userId: String!
-            tag: String!
-        ): Tag
-        
+            tags: [TagObject]!
+        ): Article
+
         submitArticle (
             title: String!
             url: String!
             description: String
             userId: String!
         ): Article
-        
-        initializeUser(
-            zendeskId: String!
-        ): User
-    }
+
+    initializeUser(zendeskId: String!): User
+  }
 `;
 
 // Example query

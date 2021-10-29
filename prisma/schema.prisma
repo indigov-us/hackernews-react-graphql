@@ -36,7 +36,8 @@ model Vote {
 
 model Tag {
     id      String @id @default(uuid())
-    text    String
+    label   String  @default("")
+    value    String @default("")
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     userId  String?
