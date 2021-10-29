@@ -1,18 +1,20 @@
-import * as React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { UPVOTE_NEWS_ITEM_MUTATION } from '../data/mutations/upvote-news-item-mutation';
+import { VOTE_NEWS_ITEM_MUTATION } from '../data/mutations/upvote-news-item-mutation';
 
 export default function Vote(props): JSX.Element {
-  const { id } = props;
-  const [vote, { data, loading, error }] = useMutation(UPVOTE_NEWS_ITEM_MUTATION, {
-    onError: () => console.error(Error),
-    variables: { id },
-  });
+  const [score, setScore] = useState<number | undefined>(undefined);
+  const { articleId, userId } = props;
+  const [scoreArticle, { data, loading, error }] = useMutation(VOTE_NEWS_ITEM_MUTATION);
+
+  const onSelect = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    scoreArticle({ variables: { articleId, userId, vote: target.value } });
+  };
 
   // onClick={(): Promise<any> => upvoteNewsItem()}
   return (
-    <form method="post" action="vote" style={{ marginRight: '16px', flex: 1 }}>
-      <fieldset style={{ border: 'none' }}>
+    <form style={{ marginRight: '16px', flex: 1 }}>
+      <fieldset style={{ border: 'none' }} onChange={onSelect}>
         <span style={{ marginRight: '16px' }}>Least relevant</span>
         <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
           <input type="radio" id="1" name="vote" value="1" />

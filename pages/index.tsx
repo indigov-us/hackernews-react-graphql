@@ -9,14 +9,15 @@ import { FeedType } from '../src/data/models';
 import { POSTS_PER_PAGE } from '../src/config';
 
 const query = gql`
-  query topNewsItems($type: FeedType!, $first: Int!, $skip: Int!) {
-    feed(type: $type, first: $first, skip: $skip) {
-      ...NewsFeed
+  query feed {
+    feed {
+      id
+      title
+      description
+      score
     }
   }
-  ${newsFeedNewsItemFragment}
 `;
-
 export interface ITopNewsFeedProps {
   options: {
     currentUrl: string;
@@ -34,7 +35,7 @@ export function IndexPage(props): JSX.Element {
   const skip = POSTS_PER_PAGE * pageNumber;
 
   const { data } = useQuery(query, { variables: { first, skip, type: FeedType.TOP } });
-
+console.log({data})
   return (
     <MainLayout currentUrl={router.pathname}>
       <NewsFeed data={data} currentUrl={router.pathname} first={first} skip={skip} />

@@ -47,7 +47,7 @@ export function NewsDetail(props: INewsDetailProps): JSX.Element {
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <Vote />
-        <TagManager id={id} />
+        <TagManager articleId={id} userId={submitterId} />
       </div>
     </div>
   );

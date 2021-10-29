@@ -15,3 +15,21 @@ export const SUBMIT_NEWS_ITEM_MUTATION = gql`
   }
   ${newsFeedNewsItemFragment}
 `;
+
+export const SUBMIT_NEWS_ITEM_MUTATION = gql`
+  mutation m1 {
+    submitArticle(
+      title: "t1"
+      url: "abc.com"
+      description: "desk"
+      userId: "77adf8a8-a6a8-46bf-b509-64f541f18368"
+    ) {
+      id
+      title
+      description
+      user {
+        zendeskId
+      }
+    }
+  }
+`;

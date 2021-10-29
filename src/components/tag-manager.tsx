@@ -1,5 +1,7 @@
 import Select from 'react-select';
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_TAG_TO_ARTICLE_MUTATION } from '../data/mutations/update-article-tags-mutation';
 
 const MOCK_OPTIONS = [
   { value: 'abortion', label: 'abortion' },
@@ -15,13 +17,18 @@ const MOCK_OPTIONS = [
   { value: 'vaccine', label: 'vaccine for kids' },
 ];
 
+// TODO::
 function TagManager(props): JSX.Element {
-  const { articleId, defaultTags } = props;
+  const { articleId, defaultTags, userId } = props;
+
+  const [addTags, { data, loading, error }] = useMutation(ADD_TAG_TO_ARTICLE_MUTATION);
+
   const [selectedOptions, setSelectedOptions] = useState(defaultTags || []);
 
   // TODO:: update tags mutation
   const handleChange = (value) => {
     console.log(articleId);
+    addTags({ variables: { articleId, userId, tag: value } });
   };
 
   return (
