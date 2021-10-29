@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 
 import { NewsFeed } from '../src/components/news-feed';
@@ -30,7 +30,7 @@ export interface ITopNewsFeedProps {
   };
 }
 
-export function IndexPage(props): JSX.Element {
+export function Top10(props): JSX.Element {
   const { router } = props;
 
   const pageNumber = (router.query && +router.query.p) || 0;
@@ -40,11 +40,21 @@ export function IndexPage(props): JSX.Element {
 
   const { data } = useQuery(query, { variables: { first, skip, type: FeedType.TOP } });
 
+  const top10Articles = useMemo(() => {
+    const articles = [...data?.feed];
+    return articles.sort((a, b) => b.score - a.score)
+  }, [data]);
+
   return (
     <MainLayout currentUrl={router.pathname}>
-      <NewsFeed data={data} currentUrl={router.pathname} first={first} skip={skip} />
+      <NewsFeed
+        data={{ feed: top10Articles }}
+        currentUrl={router.pathname}
+        first={first}
+        skip={skip}
+      />
     </MainLayout>
   );
 }
 
-export default withDataAndRouter(IndexPage);
+export default withDataAndRouter(Top10);

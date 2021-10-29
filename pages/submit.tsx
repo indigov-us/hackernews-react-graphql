@@ -16,13 +16,13 @@ function SubmitPage(props: ISubmitPageProps): JSX.Element {
 
   const [title, setTitle] = useState<string>('');
   const [url, setUrl] = useState<string>('');
-  const [text, setText] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
 
   const [submitNewsItem] = useMutation(SUBMIT_NEWS_ITEM_MUTATION, {
-    variables: { title, url, text },
+    variables: { title, url, description, userId: 'de151acc-bd78-4e6e-9796-5bc275661969' },
     onCompleted(res) {
-      if (res && res.data) {
-        Router.push(`/item?id=${res.data.submitNewsItem.id}`);
+      if (res && res.submitArticle) {
+        Router.push(`/item?id=${res.submitArticle.id}`);
       }
     },
     onError(err) {
@@ -33,10 +33,7 @@ function SubmitPage(props: ISubmitPageProps): JSX.Element {
   return (
     <MainLayout
       currentUrl={router.pathname}
-      title="Submit"
-      isNavVisible={false}
-      isFooterVisible={false}
-    >
+      title="Add New Article">
       <tr>
         <td>
           <form onSubmit={(e): void => e.preventDefault()}>
@@ -50,7 +47,7 @@ function SubmitPage(props: ISubmitPageProps): JSX.Element {
             <table style={{ border: '0' }}>
               <tbody>
                 <tr>
-                  <td>title</td>
+                  <td>Title</td>
                   <td>
                     <input
                       type="text"
@@ -85,14 +82,14 @@ function SubmitPage(props: ISubmitPageProps): JSX.Element {
                   </td>
                 </tr>
                 <tr>
-                  <td>text</td>
+                  <td>Description</td>
                   <td>
                     <textarea
                       name="text"
                       rows={4}
                       cols={49}
                       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-                        setText(e.target.value);
+                        setDescription(e.target.value);
                       }}
                     />
                   </td>
@@ -117,15 +114,6 @@ function SubmitPage(props: ISubmitPageProps): JSX.Element {
                   <td>
                     Leave url blank to submit a question for discussion. If there is no url, the
                     text (if any) will appear at the top of the thread.
-                    <br />
-                    <br />
-                    You can also submit via{' '}
-                    <Link href="/bookmarklet">
-                      <a rel="nofollow">
-                        <u>bookmarklet</u>
-                      </a>
-                    </Link>
-                    .
                   </td>
                 </tr>
               </tbody>

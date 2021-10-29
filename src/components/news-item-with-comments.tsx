@@ -1,8 +1,6 @@
 import * as React from 'react';
 
 import { NewsItemModel } from '../data/models';
-import { CommentBox } from './comment-box';
-import { Comments } from './comments';
 import { LoadingSpinner } from './loading-spinner';
 import { NewsDetail } from './news-detail';
 import { NewsTitle } from './news-title';
@@ -25,7 +23,7 @@ export function NewsItemWithComments(props: INewsItemWithCommentsProps): JSX.Ele
     );
   }
 
-  if (loading || !newsItem || !newsItem.comments) {
+  if (loading || !newsItem) {
     return <LoadingSpinner />;
   }
 
@@ -42,17 +40,14 @@ export function NewsItemWithComments(props: INewsItemWithCommentsProps): JSX.Ele
           className="itemlist"
         >
           <tbody>
-            <NewsTitle isRankVisible={false} {...newsItem} />
-            <NewsDetail isPostScrutinyVisible {...newsItem} />
-            <tr key="morespace" className="morespace" style={{ height: '10px' }} />
-            <CommentBox />
+            <tr key={`${newsItem.id}`} className="test">
+              <td className="news-feed-row">
+                <NewsTitle isRankVisible={false} {...newsItem} />
+                <NewsDetail isItemDetail {...newsItem} />
+              </td>
+            </tr>
           </tbody>
         </table>
-        <br />
-        <br />
-        <Comments newsItem={newsItem} />
-        <br />
-        <br />
       </td>
     </tr>
   );

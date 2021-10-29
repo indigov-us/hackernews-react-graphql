@@ -1,6 +1,8 @@
 import Select from 'react-select';
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { useMutation } from '@apollo/client';
+import sortBy from 'lodash.sortby';
+import uniqBy from 'lodash.uniqby';
 import { ADD_TAG_TO_ARTICLE_MUTATION } from '../data/mutations/update-article-tags-mutation';
 
 const MOCK_OPTIONS = [
@@ -17,26 +19,25 @@ const MOCK_OPTIONS = [
   { value: 'vaccine', label: 'vaccine for kids' },
 ];
 
-// TODO::
 function TagManager(props): JSX.Element {
-  const { articleId, defaultTags, userId } = props;
+  const { articleId, defaultTags = [], userId } = props;
+  const [addTags] = useMutation(ADD_TAG_TO_ARTICLE_MUTATION);
 
-  const [addTags, { data, loading, error }] = useMutation(ADD_TAG_TO_ARTICLE_MUTATION);
-
-  const [selectedOptions, setSelectedOptions] = useState(defaultTags || []);
-
-  // TODO:: update tags mutation
   const handleChange = (value) => {
-    setSelectedOptions(value)
     addTags({ variables: { articleId, userId, tags: value } });
   };
+  const initialTags = useMemo(() => {
+    const uniqueTags = uniqBy(defaultTags, 'value')
+    const sortedTags = sortBy(uniqueTags, 'label')
+    return sortedTags.map((tag) => ({'value': tag.value, 'label': tag.label}));
+  }, [defaultTags]);
 
   return (
     <div style={{ flex: 1 }}>
       <Select
         placeholder="Add tag"
+        defaultValue={initialTags}
         isMulti
-        value={selectedOptions}
         onChange={handleChange}
         options={MOCK_OPTIONS}
       />

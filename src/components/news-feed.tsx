@@ -118,6 +118,7 @@ export const NewsFeed: React.FC<INewsFeedContainerProps> = (props) => {
   }
 
   if (data?.feed?.length) {
+    
     return (
       <NewsFeedView
         newsItems={data?.feed}

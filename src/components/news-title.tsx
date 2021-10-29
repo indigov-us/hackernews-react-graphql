@@ -22,7 +22,7 @@ export const newsTitleFragment = `
 `;
 
 export function NewsTitle(props: INewsTitleProps): JSX.Element {
-  const { id, isRankVisible = true, isUpvoteVisible = true, rank, title, upvoted, url } = props;
+  const { id, isRankVisible = true, rank, title, url } = props;
 
   return (
     <div className="athing" style={{ display: 'flex', flexDirection: 'row', marginBottom: '8px' }}>

@@ -8,39 +8,30 @@ interface IHeaderNavProps {
   title: string;
 }
 
+const Separator = () => <span style={{ margin: '0 16px' }}>|</span>;
+
 export function HeaderNav(props: IHeaderNavProps): JSX.Element {
-  const { userId, currentUrl, isNavVisible, title } = props;
+  const { currentUrl, isNavVisible, title } = props;
 
   return isNavVisible ? (
     <div className="pagetop">
       <div style={{ fontSize: '26px', marginBottom: '8px' }}>
-        <Link href="/" as="/news">
+        <Link href="/">
           <a>{title}</a>
         </Link>
       </div>
       <div>
-        {userId && ' | '}
-        <Link href="/newest">
-          <a className={currentUrl === '/newest' ? 'topsel' : ''}>new</a>
+        <Link href="/">
+          <a className={currentUrl === '/' ? 'topsel' : ''}>All</a>
         </Link>
-        {' | '}
-        {/* <Link href="/newcomments">
-          <a className={currentUrl === '/newcomments' ? 'topsel' : ''}>comments</a>
+        <Separator />
+        <Link href="/top">
+          <a className={currentUrl === '/top' ? 'topsel' : ''}>Top 10</a>
         </Link>
-        {' | '} */}
-        {/* <Link href="/show">
-          <a className={currentUrl === '/show' ? 'topsel' : ''}>all</a>
-        </Link>
-        {' | '} */}
+        <Separator />
         <Link href="/submit">
-          <a className={currentUrl === '/submit' ? 'topsel' : ''}>submit</a>
+          <a className={currentUrl === '/submit' ? 'topsel' : ''}>Add new article</a>
         </Link>
-        {currentUrl === '/best' && ' | '}
-        {currentUrl === '/best' && (
-          <Link href="/best">
-            <a className="topsel">best</a>
-          </Link>
-        )}
       </div>
     </div>
   ) : (
