@@ -27,8 +27,8 @@ function TagManager(props): JSX.Element {
 
   // TODO:: update tags mutation
   const handleChange = (value) => {
-    console.log(articleId);
-    addTags({ variables: { articleId, userId, tag: value } });
+    setSelectedOptions(value)
+    addTags({ variables: { articleId, userId, tags: value } });
   };
 
   return (
@@ -37,7 +37,7 @@ function TagManager(props): JSX.Element {
         placeholder="Add tag"
         isMulti
         value={selectedOptions}
-        onChange={setSelectedOptions}
+        onChange={handleChange}
         options={MOCK_OPTIONS}
       />
     </div>

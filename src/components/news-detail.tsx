@@ -32,21 +32,18 @@ export function NewsDetail(props: INewsDetailProps): JSX.Element {
     creationTime,
     hidden,
     id,
-    isFavoriteVisible = true,
-    isJobListing = false,
-    isPostScrutinyVisible = false,
-    submitterId,
-    upvoteCount,
+    score,
+    submitterId = 'de151acc-bd78-4e6e-9796-5bc275661969',
   } = props;
 
   return (
     <div>
       <div style={{ marginBottom: '8px' }}>
-      <span className="score">{upvoteCount} points</span>
+      <span className="score">{score} points</span>
       {/* {' by '} {submitterId} {convertNumberToTimeAgo(creationTime)} */}
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Vote />
+        <Vote articleId={id} userId={submitterId} />
         <TagManager articleId={id} userId={submitterId} />
       </div>
     </div>

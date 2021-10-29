@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import * as React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { NewsFeed, newsFeedNewsItemFragment } from '../src/components/news-feed';
+import { NewsFeed } from '../src/components/news-feed';
 import { withDataAndRouter } from '../src/helpers/with-data';
 import { MainLayout } from '../src/layouts/main-layout';
 import { FeedType } from '../src/data/models';

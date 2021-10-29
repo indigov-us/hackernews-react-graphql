@@ -8,7 +8,7 @@ export default function Vote(props): JSX.Element {
   const [scoreArticle, { data, loading, error }] = useMutation(VOTE_NEWS_ITEM_MUTATION);
 
   const onSelect = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    scoreArticle({ variables: { articleId, userId, vote: target.value } });
+    scoreArticle({ variables: { articleId, userId, vote: Number(target.value) } });
   };
 
   // onClick={(): Promise<any> => upvoteNewsItem()}

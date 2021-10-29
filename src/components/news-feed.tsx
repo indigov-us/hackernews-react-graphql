@@ -45,7 +45,7 @@ export function NewsFeedView(props: INewsFeedProps): JSX.Element {
   const nextPage = Math.ceil((skip || 1) / first) + 1;
 
   return (
-    <table className="itemlist">
+    <table className="itemlist" style={{ width: '100%' }}>
       <tbody>
         {notice && notice}
         <>
