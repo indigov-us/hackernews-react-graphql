@@ -45,7 +45,7 @@ export function ItemPage(props): JSX.Element {
   });
 
   return (
-    <MainLayout currentUrl={router.pathname}>
+    <MainLayout currentUrl={router.pathname} title={data?.article?.title || 'Article Detail'}>
       <NewsItemWithComments error={data?.error} loading={data?.loading} newsItem={data?.article} />
     </MainLayout>
   );

@@ -38,7 +38,7 @@ export function IndexPage(props): JSX.Element {
   const first = POSTS_PER_PAGE;
   const skip = POSTS_PER_PAGE * pageNumber;
 
-  const { data } = useQuery(query, { variables: { first, skip, type: FeedType.TOP } });
+  const { data } = useQuery(query, { variables: { first, skip, type: FeedType.TOP }, fetchPolicy: "no-cache" });
 
   return (
     <MainLayout currentUrl={router.pathname}>
