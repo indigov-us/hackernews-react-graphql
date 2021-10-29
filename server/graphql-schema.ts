@@ -8,110 +8,97 @@ import gql from 'graphql-tag';
   Comments are provided when property is not obvious
 */
 export const typeDefs = gql`
-    scalar Date
+  scalar Date
 
-    type Vote {
-        id: String!
-        createdAt: Date!
-        updatedAt: Date
-        value: Float!
-        userId: String!
-        user: User
-        articleId: String!
-        article: Article
-    }
+  type Vote {
+    id: String!
+    createdAt: Date!
+    updatedAt: Date
+    value: Float!
+    userId: String!
+    user: User
+    articleId: String!
+    article: Article
+  }
 
+  type Article {
+    id: String!
 
-    type Article {
+    tags: [Tag]!
+    votes: [Vote]!
 
-        id: String!
+    # The news item headline
+    title: String!
 
-        tags: [Tag]!
-        votes: [Vote]!
+    description: String
 
-        # The news item headline
-        title: String!
+    url: String
 
-        description: String
+    score: Float
 
-        url: String
+    # Fetches the author based on submitterId
+    user: User
+  }
 
-        score: Float
+  type Tag {
+    id: String!
+    createdAt: Date!
+    updatedAt: Date
 
-        # Fetches the author based on submitterId
-        user: User
+    value: String!
+    label: String!
+    userId: String!
+    user: User
+    articleId: String!
+    article: Article
+  }
 
-    }
+  input TagObject {
+    label: String!
+    value: String!
+  }
 
-    type Tag {
-        id: String!
-        createdAt: Date!
-        updatedAt: Date
+  type User {
+    # The user ID is a string of the username
+    id: String!
+    createdAt: Date!
+    updatedAt: Date
 
-        value: String!
-        label: String!
-        userId: String!
-        user: User
-        articleId: String!
-        article: Article
-    }
-    
-    input TagObject {
-        label: String!
-        value: String!
-    }
+    zendeskId: String!
 
+    articles: [Article]!
+    tags: [Tag]!
+    votes: [Vote]!
+  }
 
-    type User {
-        # The user ID is a string of the username
-        id: String!
-        createdAt: Date!
-        updatedAt: Date
+  # the schema allows the following queries:
+  type Query {
+    # A comment, it's parent could be another comment or a news item.
+    tag(id: Int!): Tag
 
-        zendeskId: String!
+    feed(
+      # The number of items to skip, for pagination
+      skip: Int
+    ): [Article]
 
-        articles: [Article]!
-        tags: [Tag]!
-        votes: [Vote]!
-    }
+    # A news item
+    article(id: String!): Article
 
-    # the schema allows the following queries:
-    type Query {
-        # A comment, it's parent could be another comment or a news item.
-        tag(id: Int!): Tag
+    # A user
+    user(zendeskId: String!): User
+  }
 
-        feed(
-            # The number of items to skip, for pagination
-            skip: Int,
-        ): [Article]
+  # This schema allows the following mutations:
+  type Mutation {
+    voteOnArticle(
+      articleId: String!
+      userId: String!
+      vote: Int! # 1-4
+    ): Article
 
-        # A news item
-        article(id: String!): Article
+    tagArticle(articleId: String!, userId: String!, tags: [TagObject]!): Article
 
-        # A user
-        user(zendeskId: String!): User
-    }
-
-    # This schema allows the following mutations:
-    type Mutation {
-        voteOnArticle(
-            articleId: String!
-            userId: String!
-            vote: Int! # 1-4
-        ): Article
-
-        tagArticle(
-            articleId: String!
-            userId: String!
-            tags: [TagObject]!
-        ): Article
-
-        submitArticle (
-            title: String!
-            url: String!
-            description: String
-            userId: String!
-        ): Article
+    submitArticle(title: String!, url: String!, description: String, userId: String!): Article
 
     initializeUser(zendeskId: String!): User
   }

@@ -42,10 +42,10 @@ export const resolvers: IResolvers<any, IGraphQlSchemaContext> = {
       });
     },
 
-    async feed(root, { type, first, skip }, context): Promise<(unknown | void)[]> {
-      const limit = first < 1 || first > 30 ? 30 : first; // Could put this constant limit of 30 items into config
-
-      const articles = await context.prisma.article.findMany();
+    async feed(root, { skip }, context): Promise<(unknown | void)[]> {
+      const articles = await context.prisma.article.findMany({
+        skip
+      });
 
       return articles;
     },
